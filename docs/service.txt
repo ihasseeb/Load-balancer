@@ -1,0 +1,20 @@
+# Check Redis
+Get-Process redis-server
+
+# Check Prometheus (naya terminal mein)
+cd bin
+.\prometheus.exe
+
+# Check Loki (naya terminal mein)
+cd bin
+.\loki-windows-amd64.exe
+
+# Check NGINX (naya terminal mein)
+cd bin
+.\nginx.exe
+
+# Dashboard check (browser mein)
+http://localhost:3000
+
+# Backend check (browser mein)
+http://localhost:8000

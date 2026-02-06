@@ -1,0 +1,17 @@
+# Strict Ignore for Speed
+**/node_modules
+node_modules
+**/build
+**/dist
+**/logs/monitoring.db
+**/logs/*.log
+**/bin/*.exe
+**/bin/*.msi
+**/bin/*.zip
+**/.git
+**/.vscode
+**/*.ps1
+loki-data
+prometheus-data
+redis-data
+tmp

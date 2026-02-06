@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Load Balancer | Premium Architecture</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #030508;
+            --blue: #3b82f6;
+            --purple: #8b5cf6;
+            --green: #10b981;
+            --orange: #f59e0b;
+            --pink: #ec4899;
+            --glass: rgba(15, 23, 42, 0.75);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-main: #f1f5f9;
+            --text-dim: #94a3b8;
+            --glow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            min-height: 100vh;
+            padding: 40px;
+            background-image:
+                radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.03) 0%, transparent 50%),
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: cover, 50px 50px, 50px 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 0%, var(--blue) 50%, var(--purple) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            font-weight: 300;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .phase-section {
+            position: relative;
+        }
+
+        .phase-tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .phase-tag::after {
+            content: "";
+            height: 1px;
+            flex-grow: 1;
+            background: linear-gradient(to right, var(--blue), transparent);
+        }
+
+        .phase-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: var(--glow);
+        }
+
+        .card h3 {
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card p {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            line-height: 1.5;
+        }
+
+        .endpoint {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--blue);
+            margin-top: 10px;
+            display: inline-block;
+            padding: 2px 6px;
+            background: rgba(59, 130, 246, 0.1);
+            border-radius: 4px;
+        }
+
+        /* Store & Show Specifics */
+        .store-tag {
+            background: var(--green) !important;
+            color: white !important;
+        }
+
+        .show-tag {
+            background: var(--orange) !important;
+            color: white !important;
+        }
+
+        .ai-card {
+            border-left: 4px solid var(--purple);
+            background: rgba(139, 92, 246, 0.05);
+        }
+
+        .storage-card {
+            border-left: 4px solid var(--green);
+        }
+
+        .dashboard-card {
+            border-left: 4px solid var(--orange);
+        }
+
+        .flow-arrow {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 1.5rem;
+            opacity: 0.3;
+            margin: -20px 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>AI Load Balancer Architecture</h1>
+        <p class="subtitle">Premium Dockerized Flow &rarr; Ingestion &rarr; Storage &rarr; Dashboard</p>
+    </header>
+
+    <div class="container">
+
+        <!-- PHASE 1: DOCKER SERVICES -->
+        <div class="phase-section">
+            <div class="phase-tag">Phase 1: Docker Services Orchestration</div>
+            <div class="phase-row">
+                <div class="card" style="border-top: 2px solid var(--blue);">
+                    <h3>🌐 NGINX</h3>
+                    <p>Reverse proxy & entry point for all traffic.</p>
+                </div>
+                <div class="card">
+                    <h3>⚡ Redis</h3>
+                    <p>Fast caching and real-time rate limiting.</p>
+                </div>
+                <div class="card" style="border-top: 2px solid var(--orange);">
+                    <h3>🔥 Prometheus</h3>
+                    <p>Collecting and storing system performance metrics.</p>
+                </div>
+                <div class="card" style="border-top: 2px solid var(--purple);">
+                    <h3>� Loki</h3>
+                    <p>Centralized log aggregation for the entire stack.</p>
+                </div>
+                <div class="card" style="border-top: 2px solid var(--blue);">
+                    <h3>� AI Adaptive Dashboard</h3>
+                    <p>Real-time visualization & intelligent control UI.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ARROW INDICATORS (Phase 1 -> Phase 2) -->
+        <div
+            style="display: flex; justify-content: space-around; padding: 20px 0; font-size: 1.5rem; color: var(--text-dim); opacity: 0.5;">
+            <span>↓</span><span>↓</span><span>↓</span><span>↓</span>
+        </div>
+
+        <!-- PHASE 2: DATA INGESTION & STORAGE -->
+        <div class="phase-section">
+            <div class="phase-tag" style="color: var(--green);">Phase 2: Real-Time Data Ingestion & Storage</div>
+
+            <div class="phase-row" style="grid-template-columns: 1fr 1fr;">
+                <div class="card" style="border-left: 3px solid var(--pink);">
+                    <h3>📝 Server & Request Logs</h3>
+                    <p>Real-time extraction of: Timestamp, IP Address, Method, Endpoint, Status, Device, Source, Bytes.
+                    </p>
+                </div>
+                <div class="card" style="border-left: 3px solid var(--orange);">
+                    <h3>📈 System Metrics</h3>
+                    <p>Real-time Response Time, CPU Load, Memory Usage, & Active Connections.</p>
+                </div>
+            </div>
+
+            <!-- ARROWS TO STORAGE -->
+            <div
+                style="display: flex; justify-content: center; gap: 400px; margin: 15px 0; color: var(--green); font-size: 1.5rem; opacity: 0.7;">
+                <span>↓</span><span>↓</span>
+            </div>
+
+            <!-- Central Storage -->
+            <div style="display: flex; justify-content: center;">
+                <div class="card storage-card"
+                    style="background: rgba(16, 185, 129, 0.1); border-color: var(--green); border-width: 2px; width: 450px; text-align: center;">
+                    <h3>🗄️ SQLite Database</h3>
+                    <p><b>monitoring.db</b>: Unified store for all processed data.</p>
+                    <span class="endpoint">Path: ./logs/monitoring.db</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ARROWS TO APPLICATION LAYER (SQLite -> Phase 3) -->
+        <div
+            style="display: flex; justify-content: center; gap: 400px; margin: 20px 0; color: var(--purple); font-size: 1.5rem; opacity: 0.7;">
+            <span>↓</span><span>↓</span>
+        </div>
+
+        <!-- PHASE 3: APPLICATION LAYER -->
+        <div class="phase-section">
+            <div class="phase-tag"
+                style="background: var(--purple); color: white; padding: 2px 10px; border-radius: 4px; display: inline-flex; width: auto;">
+                PHASE 3: Application Layer</div>
+
+            <div class="phase-row" style="margin-top: 20px;">
+                <!-- Backend API -->
+                <div class="card" style="border-top: 4px solid var(--purple);">
+                    <h3 style="color: var(--purple);">Backend API (Express.js)</h3>
+                    <div
+                        style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; border-bottom: 1px solid var(--border); padding-bottom: 5px; margin-bottom: 10px; color: var(--text-dim);">
+                        Port: 8000 | Core Endpoints:
+                    </div>
+                    <div
+                        style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-main); line-height: 1.5; display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                        <div>• /api/v1/health</div>
+                        <div>• /api/v1/logs</div>
+                        <div>• /api/v1/metrics</div>
+                        <div>• /api/v1/services/status</div>
+                        <div>• /api/v1/ai-services</div>
+                        <div>• /api/loadbalancer/route</div>
+                        <div>• /api/v1/auth</div>
+                    </div>
+                </div>
+
+                <!-- Dashboard -->
+                <div class="card" style="border-top: 4px solid var(--blue);">
+                    <h3 style="color: var(--blue);">Dashboard (React/Vite)</h3>
+                    <div
+                        style="font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; border-bottom: 1px solid var(--border); padding-bottom: 5px; margin-bottom: 10px; color: var(--text-dim);">
+                        Port: 3000 | System Modules:
+                    </div>
+                    <div
+                        style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-main); line-height: 1.6;">
+                        <div style="margin-bottom: 8px;">
+                            <b style="color: var(--blue);">• DashboardPage:</b>
+                            <div style="color: var(--text-dim); padding-left: 10px;">Real-time Line & Pie Charts
+                                (throughput, latency, CPU/RAM).</div>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <b style="color: var(--pink);">• LogsPage (Audit):</b>
+                            <div style="color: var(--text-dim); padding-left: 10px;">Live Request Audit: IP, Device,
+                                Status & <b>AI Decisions</b>.</div>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <b style="color: var(--green);">• ServicesMonitor:</b>
+                            <div style="color: var(--text-dim); padding-left: 10px;">Health status & <b>Start/Stop
+                                    control</b> for critical services.</div>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <b style="color: var(--purple);">• ModelInsights:</b>
+                            <div style="color: var(--text-dim); padding-left: 10px;">AI Model Weight analytics & Dynamic
+                                decision logs.</div>
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <b style="color: var(--orange);">• SettingsPanel:</b>
+                            <div style="color: var(--text-dim); padding-left: 10px;">Tunable Rate Limits, Cooldowns &
+                                Learning Rate.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Arrow to Final Decision/Action -->
+            <div
+                style="display: flex; justify-content: center; margin-top: 20px; color: var(--blue); font-size: 1.5rem; opacity: 0.7;">
+                <span>↓</span>
+            </div>
+            <p style="text-align: center; color: var(--text-dim); font-size: 0.8rem; font-style: italic;">User Action &
+                Decision Layer</p>
+        </div>
+
+        <!-- PHASE 4: AI DECISION ENGINE -->
+        <div class="phase-section">
+            <div class="phase-tag"
+                style="background: var(--purple); color: white; padding: 2px 10px; border-radius: 4px; display: inline-flex; width: auto;">
+                PHASE 4: AI Decision Engine & ML Training</div>
+
+            <div class="phase-row" style="margin-top: 20px;">
+                <!-- Model Core -->
+                <div class="card ai-card" style="grid-column: span 2; border-top: 4px solid var(--purple);">
+                    <h3 style="color: var(--purple);">🧠 Adaptive AI Algorithms</h3>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 10px;">
+                        <div style="background: rgba(139, 92, 246, 0.1); padding: 10px; border-radius: 8px;">
+                            <b style="color: #fff; font-size: 0.8rem;">Core ML Models</b>
+                            <ul
+                                style="font-size: 0.65rem; color: var(--text-dim); list-style: none; margin-top: 5px; padding: 0;">
+                                <li style="margin-bottom: 5px;">🌲 <b style="color: #fff;">Random Forest:</b> Predicts
+                                    best server based on metrics.</li>
+                                <li>🚀 <b style="color: #fff;">XGBoost:</b> High-accuracy complex routing logic.</li>
+                            </ul>
+                        </div>
+                        <div style="background: rgba(139, 92, 246, 0.1); padding: 10px; border-radius: 8px;">
+                            <b style="color: #fff; font-size: 0.8rem;">Deep Learning</b>
+                            <ul
+                                style="font-size: 0.65rem; color: var(--text-dim); list-style: none; margin-top: 5px; padding: 0;">
+                                <li style="margin-bottom: 5px;">🧠 <b style="color: #fff;">LSTM:</b> Forecasts future
+                                    load for proactive scaling.</li>
+                                <li>👁️ <b style="color: #fff;">Anomaly:</b> Detects DDoS & bot attack patterns.</li>
+                            </ul>
+                        </div>
+                        <div style="background: rgba(139, 92, 246, 0.1); padding: 10px; border-radius: 8px;">
+                            <b style="color: #fff; font-size: 0.8rem;">Baselines</b>
+                            <ul
+                                style="font-size: 0.65rem; color: var(--text-dim); list-style: none; margin-top: 5px; padding: 0;">
+                                <li style="margin-bottom: 5px;">🔄 <b style="color: #fff;">Round Robin:</b> Simple
+                                    sequential distribution.</li>
+                                <li>⚖️ <b style="color: #fff;">Least Conn:</b> Routes to server with lowest load.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Process -->
+                <div class="card" style="border-top: 4px solid var(--orange);">
+                    <h3>⚙️ Training & Inference</h3>
+                    <p style="font-size: 0.75rem; color: var(--text-dim); line-height: 1.5;">
+                        1. 📊 <b>Collect</b>: Sync from API /logs & /metrics.<br>
+                        2. 🛠️ <b>Preprocess</b>: Feature Extraction & Scaling.<br>
+                        3. 📈 <b>Predict</b>: Real-time decision making.<br>
+                        4. 💾 <b>Save</b>: Artifacts (model.pkl / scaler.pkl).
+                    </p>
+                </div>
+            </div>
+
+            <!-- RETURN FLOW TO DASHBOARD -->
+            <div style="text-align: center; margin-top: 30px;">
+                <div style="color: var(--blue); font-size: 1.5rem; transform: rotate(180deg); display: inline-block;">↓
+                </div>
+                <p style="color: var(--blue); font-size: 0.9rem; margin-top: 5px; font-weight: 600;">
+                    &nwarr; Return to Dashboard: Model Insights & Predictions &nwarr;
+                </p>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div style="margin-top: 30px; color: var(--text-dim); font-size: 0.8rem;">
+        &copy; 2026 AI Load Balancer - Professional Architecture Overview
+    </div>
+
+</body>
+
+</html>
