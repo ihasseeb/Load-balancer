@@ -151,28 +151,6 @@ Frontend will run on: http://localhost:5173
 └───────┘
 ```
 
-## 🔧 Configuration
-
-### Environment Variables
-
-Create `.env` files in `backend/` and `frontend/`:
-
-**Backend (.env)**:
-```env
-NODE_ENV=production
-PORT=8000
-DB_PATH=/app/data/monitoring.db
-REDIS_HOST=redis
-REDIS_PORT=6379
-JWT_SECRET=your-secret-key
-JWT_EXPIRES_IN=90d
-```
-
-**Frontend (.env)**:
-```env
-VITE_API_BASE_URL=http://localhost:8000/api/v1
-```
-
 ## 📊 API Endpoints
 
 ### Health & Monitoring
