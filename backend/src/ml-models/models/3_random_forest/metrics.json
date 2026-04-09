@@ -1,0 +1,73 @@
+{
+  "accuracy": 1.0,
+  "classification_report": {
+    "0": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 450.0
+    },
+    "1": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 449.0
+    },
+    "2": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 450.0
+    },
+    "accuracy": 1.0,
+    "macro avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1349.0
+    },
+    "weighted avg": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 1349.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      450,
+      0,
+      0
+    ],
+    [
+      0,
+      449,
+      0
+    ],
+    [
+      0,
+      0,
+      450
+    ]
+  ],
+  "feature_importance": {
+    "request_count": 0.48610941237301974,
+    "avg_response_time": 0.006362649211828935,
+    "error_rate": 0.0016128037415206993,
+    "bot_rate": 0.025885748218577184,
+    "hour": 0.017216193373504645,
+    "weekday": 0.0015346477748788164,
+    "is_weekend": 0.0010358630391294785,
+    "request_count_lag_1": 0.10363813189168891,
+    "request_count_lag_2": 0.0618526639533522,
+    "request_count_lag_3": 0.06112730699754832,
+    "request_count_lag_4": 0.039449069996179094,
+    "request_count_lag_5": 0.03359771572429122,
+    "avg_response_time_lag_1": 0.004501645244595251,
+    "avg_response_time_lag_2": 0.0028377283959450357,
+    "error_rate_lag_1": 0.0007919227820190183,
+    "error_rate_lag_2": 0.0004548811924325765,
+    "request_count_rolling_mean": 0.12810252227307295,
+    "request_count_rolling_std": 0.023889093816415807
+  }
+}

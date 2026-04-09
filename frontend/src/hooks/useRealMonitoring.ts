@@ -75,103 +75,70 @@ export function useRealMonitoring(isMonitoring: boolean, settings: Settings) {
     const fetchAIServicesData = async () => {
         try {
             const response = await apiService.getAIServices();
-            if (response && response.logs) {
-                console.log('✅ API Response received:', {
-                    logsCount: response.logs?.count,
-                    requestsCount: response.recentRequests?.count,
-                    stats: response.statistics
+
+            if (response) {
+                console.log('✅ AI Heartbeat received:', {
+                    rps_points: response.metricsHistory?.rps?.length,
+                    active_logs: response.logs?.count,
+                    total_reqs: response.statistics?.totalRequests
                 });
 
-                // Transform backend system logs to AIDecision format
-                const logsData = response.logs?.data || [];
-                const systemLogs = logsData.map((log: any) => ({
-                    id: log.id?.toString() || Date.now().toString(),
-                    timestamp: log.timestamp || new Date().toISOString(),
-                    action: log.message?.split(' - ')[0] || 'System Action',
-                    reason: log.message || 'Unknown',
-                    status: log.level === 'ERROR' ? ('Failed' as const) : ('Success' as const)
+                // 1. Update Top Stats
+                const stats = response.statistics || {};
+                const latestRps = response.metricsHistory?.rps?.[0]?.value || 0;
+                setCurrentRequests(latestRps);
+                setBlockedRequests(stats.errorCount || 0);
+                setRateLimitData([
+                    { name: 'Allowed', value: stats.successCount || 0 },
+                    { name: 'Blocked', value: stats.errorCount || 0 },
+                ]);
+
+                // 2. Update Charts (RPS History)
+                if (response.metricsHistory?.rps) {
+                    const chartFormatted = response.metricsHistory.rps.reverse().map((m: any) => ({
+                        time: m.time,
+                        requests: m.value
+                    }));
+                    setRequestsData(chartFormatted);
+                }
+
+                // 3. Update Server Distribution (Real Pie Chart Data)
+                if (response.serverDistribution) {
+                    setServerData(response.serverDistribution);
+                    setActiveServers(response.serverDistribution.length || 0);
+                }
+
+                // 3. Update AI Decisions List (Recent system events)
+                const logData = response.logs?.data || [];
+                const decisions = logData.map((log: any) => ({
+                    id: log.id.toString(),
+                    timestamp: log.timestamp,
+                    action: log.message.split(' - ')[0],
+                    reason: log.message,
+                    status: log.level === 'ERROR' ? 'Failed' : 'Success'
                 }));
+                setAiDecisions(decisions);
 
-                setAiDecisions(systemLogs.slice(0, 10)); // Show latest 10
-
-                // Transform backend requests to LogEntry interface
-                const requestsData = response.recentRequests?.data || [];
-                const transformedLogs = requestsData.map((req: any) => ({
-                    id: req.id?.toString() || Date.now().toString(),
-                    timestamp: req.timestamp || new Date().toISOString(),
-                    ip: req.userEmail || 'Unknown IP',
+                // 4. Update Detailed Logs Table
+                const reqData = response.recentRequests?.data || [];
+                const transformedLogs = reqData.map((req: any) => ({
+                    id: req.id.toString(),
+                    timestamp: req.timestamp,
+                    ip: req.ip || '0.0.0.0',
                     requestType: req.method || 'GET',
-                    endpoint: req.endpoint || '/unknown',
+                    endpoint: req.endpoint || '/api',
                     responseTime: req.responseTime || 0,
-                    decision: (req.aiDecision || 'Allowed') as 'Allowed' | 'Blocked' | 'Redirected',
+                    decision: req.aiDecision || 'Allowed',
                     bytes: Math.floor(Math.random() * 5000) + 1000,
-                    device: 'Desktop',
-                    source: 'Direct',
+                    device: req.device || 'Desktop',
+                    source: req.source || 'Direct',
                     status: req.status || 200,
                     level: req.status >= 400 ? 'error' : 'info'
                 }));
-
                 setLogs(transformedLogs);
-
-                // Get stats from response
-                const stats = response.statistics || {};
-                const totalRequests = stats.totalRequests || 0;
-                const successCount = stats.successCount || 0;
-                const errorCount = stats.errorCount || 0;
-
-                setCurrentRequests(totalRequests > 0 ? Math.ceil(totalRequests / 30) : 0); // Approximate RPS
-                setBlockedRequests(errorCount);
-                setRateLimitData([
-                    { name: 'Allowed', value: successCount },
-                    { name: 'Blocked', value: errorCount },
-                ]);
-
-                // Transform recent requests data for chart
-                const timeGroups: { [key: string]: number } = {};
-
-                requestsData.forEach((req: any) => {
-                    const reqTime = new Date(req.timestamp);
-                    const timeKey = reqTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-                    timeGroups[timeKey] = (timeGroups[timeKey] || 0) + 1;
-                });
-
-                const chartData = Object.entries(timeGroups)
-                    .slice(-20)
-                    .map(([time, requests]) => ({ time, requests }));
-
-                if (chartData.length > 0) {
-                    setRequestsData(chartData);
-                }
             }
         } catch (error) {
-            console.error('Failed to fetch AI services data from backend:', error);
-            // Fallback to regular logs endpoint
-            try {
-                const response = await apiService.getLogs();
-                if (response.data) {
-                    const transformedLogs = response.data.map((log: any) => ({
-                        id: log.id?.toString() || Date.now().toString(),
-                        timestamp: log.timestamp,
-                        ip: log.ip,
-                        requestType: log.method,
-                        endpoint: log.endpoint,
-                        responseTime: log.response_time || 0,
-                        decision: log.ai_decision || 'Allowed',
-                        bytes: log.bytes || 0,
-                        device: log.device || 'Unknown',
-                        source: log.source || 'Direct',
-                        status: log.status || 200,
-                        level: 'info'
-                    }));
-
-                    setLogs(transformedLogs);
-                    setCurrentRequests(transformedLogs.length);
-                    const blockedCount = transformedLogs.filter((log: LogEntry) => log.decision === 'Blocked').length;
-                    setBlockedRequests(blockedCount);
-                }
-            } catch (fallbackError) {
-                console.error('Fallback logs fetch also failed:', fallbackError);
-            }
+            console.error('Failed to fetch real-time AI dashboard data:', error);
         }
     };
 

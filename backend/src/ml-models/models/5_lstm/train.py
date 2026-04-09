@@ -17,6 +17,9 @@ import json
 import matplotlib.pyplot as plt
 import os
 
+# Base directory = folder where this script lives
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def load_features(features_file):
     """Load preprocessed features"""
     print(f"📖 Loading features from: {features_file}")
@@ -118,7 +121,7 @@ def evaluate_model(model, X_test, y_test, scaler):
     plt.xlabel('Time Step')
     plt.ylabel('Request Count')
     plt.legend()
-    plt.savefig('predictions.png', dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(BASE_DIR, 'predictions.png'), dpi=300, bbox_inches='tight')
     print(f"\n💾 Saved predictions plot to: predictions.png")
     
     return {
@@ -132,11 +135,11 @@ def save_model(model, scaler, metrics, seq_length):
     print("\n💾 Saving model...")
     
     # Save model
-    model.save('lstm_model.h5')
+    model.save(os.path.join(BASE_DIR, 'lstm_model.h5'))
     print("   ✅ Saved lstm_model.h5")
     
     # Save scaler
-    joblib.dump(scaler, 'scaler.pkl')
+    joblib.dump(scaler, os.path.join(BASE_DIR, 'scaler.pkl'))
     print("   ✅ Saved scaler.pkl")
     
     # Save config
@@ -145,7 +148,7 @@ def save_model(model, scaler, metrics, seq_length):
         'metrics': metrics
     }
     
-    with open('config.json', 'w') as f:
+    with open(os.path.join(BASE_DIR, 'config.json'), 'w') as f:
         json.dump(config, f, indent=2)
     print("   ✅ Saved config.json")
 
@@ -153,7 +156,7 @@ def main():
     """Main training pipeline"""
     print("🚀 LSTM Training Pipeline\n")
     
-    FEATURES_FILE = "../../data/features/features.parquet"
+    FEATURES_FILE = os.path.join(BASE_DIR, "../../data/features/features.parquet")
     SEQ_LENGTH = 10
     
     if not os.path.exists(FEATURES_FILE):

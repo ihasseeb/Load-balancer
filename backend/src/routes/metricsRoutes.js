@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
 const { getRecentMetrics } = require('../config/sqlite');
+const metricController = require('../controllers/metricController');
+
+// 📊 Manual AI Trigger
+router.get('/metrics/trigger-ai', metricController.triggerAI);
 
 // Metrics endpoint - Dashboard ko performance data provide karta hai
 router.get('/metrics', (req, res) => {

@@ -1,0 +1,287 @@
+<mxfile host="app.diagrams.net" modified="2026-03-09T10:00:00.000Z" agent="Mozilla/5.0" version="24.0.0">
+  <diagram name="Kubernetes-Architecture" id="kubernetes-k8s-architecture">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" background="none" math="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- Title -->
+        <mxCell id="title" value="Kubernetes Architecture - AI Load Balancer" style="text;html=1;align=center;verticalAlign=top;fontSize=24;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="350" y="10" width="700" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Internet Section -->
+        <mxCell id="internet-section" value="Internet / Users" style="rounded=1;whiteSpace=wrap;html=1;fontSize=14;fontStyle=1;fillColor=#4ecdc4;strokeColor=#333;strokeWidth=2;fontColor=#fff;" vertex="1" parent="1">
+          <mxGeometry x="50" y="80" width="150" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="users" value="🌍 Clients &amp; Users" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#4ecdc4;strokeColor=#333;fontColor=#fff;" vertex="1" parent="1">
+          <mxGeometry x="70" y="110" width="110" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- Kubernetes Cluster Header -->
+        <mxCell id="k8s-header" value="Kubernetes Cluster (k8s)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=16;fontStyle=1;fillColor=#667eea;strokeColor=#333;strokeWidth=2;fontColor=#fff;" vertex="1" parent="1">
+          <mxGeometry x="300" y="80" width="800" height="40" as="geometry"/>
+        </mxCell>
+
+        <!-- NGINX Ingress -->
+        <mxCell id="ingress" value="🚪 NGINX Ingress\nLoad Balancer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fillColor=#ff6b6b;strokeColor=#333;strokeWidth=2;fontColor=#fff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="350" y="160" width="150" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Frontend Service -->
+        <mxCell id="frontend-service" value="Frontend Service\n(Service:80)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#a78bfa;strokeColor=#333;strokeWidth=2;fontColor=#fff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="150" y="280" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="fe-pod1" value="📱 Frontend Pod 1\nReact + NGINX" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#d8b4fe;strokeColor=#333;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="80" y="380" width="120" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="fe-pod2" value="📱 Frontend Pod 2\nReact + NGINX" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#d8b4fe;strokeColor=#333;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="210" y="380" width="120" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Backend Service -->
+        <mxCell id="backend-service" value="Backend API Service\n(Service:8000)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#a78bfa;strokeColor=#333;strokeWidth=2;fontColor=#fff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="380" y="280" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="be-pod1" value="🔧 Backend Pod 1\nNode.js" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#d8b4fe;strokeColor=#333;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="310" y="380" width="110" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="be-pod2" value="🔧 Backend Pod 2\nNode.js" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#d8b4fe;strokeColor=#333;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="435" y="380" width="110" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="be-pod3" value="🔧 Backend Pod 3\nNode.js" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#d8b4fe;strokeColor=#333;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="560" y="380" width="110" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- AI Service -->
+        <mxCell id="ai-service" value="AI Service\n(Service:5000)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#a78bfa;strokeColor=#333;strokeWidth=2;fontColor=#fff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="620" y="280" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ai-pod1" value="🧠 AI Pod 1\nFlask + Models" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#d8b4fe;strokeColor=#333;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="560" y="380" width="120" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ai-pod2" value="🧠 AI Pod 2\nFlask + Models" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#d8b4fe;strokeColor=#333;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="695" y="380" width="120" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Database -->
+        <mxCell id="pvc" value="💾 PersistentVolume\n50Gi" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#f38181;strokeColor=#333;strokeWidth=2;fontColor=#fff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="820" y="280" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="db" value="🔒 SQLite Database\nmonitoring.db" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f5a6a6;strokeColor=#333;fontColor=#fff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="820" y="380" width="140" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Monitoring -->
+        <mxCell id="prometheus" value="📈 Prometheus\nMetrics" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#ffd93d;strokeColor=#333;strokeWidth=1.5;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="280" width="120" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="loki" value="📋 Loki\nLogs" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#6bcf7f;strokeColor=#333;strokeWidth=1.5;fontColor=#fff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="350" width="120" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="promtail" value="🔍 Promtail\nLog Shipper" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#95e1d3;strokeColor=#333;strokeWidth=1.5;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="420" width="120" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Infrastructure -->
+        <mxCell id="redis" value="⚡ Redis\nCache" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#c7f0d8;strokeColor=#333;strokeWidth=1.5;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="280" width="110" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="configmap" value="⚙️ ConfigMap\nEnv Vars" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#e8f5e9;strokeColor=#333;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="350" width="110" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="secrets" value="🔐 Secrets\nCredentials" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#e8f5e9;strokeColor=#333;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="420" width="110" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- External Models -->
+        <mxCell id="models" value="🤖 ML Models\nRF, XGBoost, LSTM" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#95e1d3;strokeColor=#333;strokeWidth=2;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="620" y="480" width="140" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- HPA Indicators -->
+        <mxCell id="hpa-labels" value="HPA: Horizontal Pod Autoscaler" style="text;html=1;align=left;verticalAlign=top;fontSize=10;fillColor=none;strokeColor=none;fontStyle=3;" vertex="1" parent="1">
+          <mxGeometry x="50" y="520" width="200" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- Arrows: Users to Ingress -->
+        <mxCell id="arrow1" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;" edge="1" parent="1" source="users" target="ingress">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="220" y="180" as="sourcePoint"/>
+            <mxPoint x="320" y="180" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Arrows: Ingress to Services -->
+        <mxCell id="arrow2" value="Route /" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;fontSize=10;" edge="1" parent="1" source="ingress" target="frontend-service">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="350" y="220" as="sourcePoint"/>
+            <mxPoint x="250" y="280" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow3" value="Route /api" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;fontSize=10;" edge="1" parent="1" source="ingress" target="backend-service">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="450" y="220" as="sourcePoint"/>
+            <mxPoint x="450" y="280" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Frontend to Backend -->
+        <mxCell id="arrow4" value="API Calls" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;fontSize=9;dashed=1;" edge="1" parent="1" source="fe-pod1" target="backend-service">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="180" y="430" as="sourcePoint"/>
+            <mxPoint x="450" y="330" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Services to Pods -->
+        <mxCell id="arrow5" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;fontSize=9;" edge="1" parent="1" source="frontend-service" target="fe-pod1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="150" y="340" as="sourcePoint"/>
+            <mxPoint x="140" y="380" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow6" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;fontSize=9;" edge="1" parent="1" source="frontend-service" target="fe-pod2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="220" y="340" as="sourcePoint"/>
+            <mxPoint x="270" y="380" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow7" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;fontSize=9;" edge="1" parent="1" source="backend-service" target="be-pod1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="380" y="340" as="sourcePoint"/>
+            <mxPoint x="365" y="380" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow8" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;fontSize=9;" edge="1" parent="1" source="backend-service" target="be-pod2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="450" y="340" as="sourcePoint"/>
+            <mxPoint x="490" y="380" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow9" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;fontSize=9;" edge="1" parent="1" source="backend-service" target="be-pod3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="520" y="340" as="sourcePoint"/>
+            <mxPoint x="615" y="380" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow10" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;fontSize=9;" edge="1" parent="1" source="ai-service" target="ai-pod1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="620" y="340" as="sourcePoint"/>
+            <mxPoint x="620" y="380" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow11" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;fontSize=9;" edge="1" parent="1" source="ai-service" target="ai-pod2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="340" as="sourcePoint"/>
+            <mxPoint x="755" y="380" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Backend to AI -->
+        <mxCell id="arrow12" value="Predictions" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;fontSize=9;dashed=1;" edge="1" parent="1" source="backend-service" target="ai-service">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="520" y="310" as="sourcePoint"/>
+            <mxPoint x="620" y="310" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- AI to Models -->
+        <mxCell id="arrow13" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;fontSize=9;" edge="1" parent="1" source="ai-pod1" target="models">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="620" y="430" as="sourcePoint"/>
+            <mxPoint x="690" y="480" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow14" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;fontSize=9;" edge="1" parent="1" source="ai-pod2" target="models">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="755" y="430" as="sourcePoint"/>
+            <mxPoint x="690" y="480" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Backend to Database -->
+        <mxCell id="arrow15" value="Read/Write" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;fontSize=9;dashed=1;" edge="1" parent="1" source="backend-service" target="pvc">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="520" y="310" as="sourcePoint"/>
+            <mxPoint x="820" y="310" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="arrow16" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;fontSize=9;" edge="1" parent="1" source="pvc" target="db">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="890" y="340" as="sourcePoint"/>
+            <mxPoint x="890" y="380" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Backend to Redis -->
+        <mxCell id="arrow17" value="Cache" style="endArrow=classic;html=1;strokeWidth=1.5;strokeColor=#999;fontSize=8;dashed=1;" edge="1" parent="1" source="backend-service" target="redis">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="520" y="340" as="sourcePoint"/>
+            <mxPoint x="1180" y="310" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Backend to Monitoring -->
+        <mxCell id="arrow18" value="Metrics" style="endArrow=classic;html=1;strokeWidth=1.5;strokeColor=#999;fontSize=8;dashed=1;" edge="1" parent="1" source="backend-service" target="prometheus">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="520" y="310" as="sourcePoint"/>
+            <mxPoint x="1020" y="310" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Promtail to Loki -->
+        <mxCell id="arrow19" value="Ship Logs" style="endArrow=classic;html=1;strokeWidth=1.5;strokeColor=#999;fontSize=8;dashed=1;" edge="1" parent="1" source="promtail" target="loki">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1020" y="445" as="sourcePoint"/>
+            <mxPoint x="1020" y="400" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Legend -->
+        <mxCell id="legend-title" value="Legend" style="text;html=1;align=left;verticalAlign=top;fontSize=12;fontStyle=1;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="50" y="560" width="100" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend-solid" value="Solid Line = Direct Request/Data Flow" style="text;html=1;align=left;verticalAlign=top;fontSize=9;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="50" y="585" width="250" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend-dashed" value="Dashed Line = Secondary/Background Flow" style="text;html=1;align=left;verticalAlign=top;fontSize=9;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="50" y="605" width="280" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend-scale" value="✓ All services have auto-scaling (HPA) enabled" style="text;html=1;align=left;verticalAlign=top;fontSize=9;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="50" y="625" width="350" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend-replicas" value="✓ Frontend: 2-3 replicas | Backend: 2-5 replicas | AI: 2-4 replicas" style="text;html=1;align=left;verticalAlign=top;fontSize=9;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="50" y="645" width="450" height="20" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

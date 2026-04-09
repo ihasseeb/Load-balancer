@@ -91,7 +91,7 @@ def parse_access_log(log_file, output_file, sample_size=None, chunk_size=10000):
 def main():
     """Main execution"""
     # Paths (fixed for correct directory structure)
-    RAW_DATA_DIR = "../../data set"  # Two levels up from preprocessing/
+    RAW_DATA_DIR = "../../../data set"  # Three levels up from preprocessing/ to reach backend/
     PROCESSED_DATA_DIR = "../data/processed"  # One level up, then into data/processed
     
     # Create directories
@@ -106,7 +106,7 @@ def main():
     parse_access_log(
         log_file=log_file,
         output_file=output_file,
-        sample_size=100000,  # 100K for development
+        sample_size=None,  # Full file — all data for better LSTM training
         chunk_size=10000
     )
     

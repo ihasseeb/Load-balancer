@@ -17,14 +17,44 @@ const db = new Database(dbPath, {
   fileMustExist: false
 });
 
-// Enable WAL mode for better concurrent access
-db.pragma('journal_mode = WAL');
+// SQLite configuration for different environments
+let useWAL = true;
 
-// Set busy timeout (in milliseconds) - wait if database is locked
+// Docker/production on Windows bind mounts does NOT support WAL mode (SQLITE_IOERR_SHMOPEN)
+// Force DELETE mode in Docker to avoid crashes
+const isDocker = process.env.NODE_ENV === 'production' || fs.existsSync('/.dockerenv');
+
+if (isDocker) {
+  // Force DELETE mode for Docker bind mounts (WAL shared memory files don't work)
+  try {
+    db.pragma('journal_mode = DELETE');
+    db.pragma('synchronous = FULL');
+    useWAL = false;
+    console.log('✅ SQLite: DELETE mode enabled (Docker/production - bind mount safe).');
+  } catch (err) {
+    console.error('❌ SQLite: Failed to set DELETE journal mode:', err.message);
+  }
+} else {
+  // Local development - try WAL mode for better performance
+  try {
+    db.pragma('journal_mode = WAL');
+    db.pragma('synchronous = NORMAL');
+    console.log('✅ SQLite: WAL mode enabled with NORMAL sync (development).');
+  } catch (err) {
+    useWAL = false;
+    console.warn('⚠️  SQLite: WAL mode failed, falling back to DELETE mode.');
+    try {
+      db.pragma('journal_mode = DELETE');
+      db.pragma('synchronous = FULL');
+      console.log('✅ SQLite: DELETE mode enabled with FULL sync.');
+    } catch (fallbackErr) {
+      console.error('❌ SQLite: Failed to set journaling mode:', fallbackErr.message);
+    }
+  }
+}
+
+// Common pragmas
 db.pragma('busy_timeout = 5000');
-
-// Optimize for concurrent access
-db.pragma('synchronous = NORMAL'); // Faster writes, still safe with WAL
 db.pragma('cache_size = -64000'); // 64MB cache
 
 // Helper function to retry database operations on lock with sleep between retries
@@ -118,6 +148,28 @@ const initDatabase = () => {
     )
   `);
 
+  // AI Policies Table - Stores AI decisions
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS ai_policies (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      timestamp TEXT NOT NULL,
+      cpu_usage REAL,
+      memory_usage REAL,
+      request_count INTEGER,
+      error_rate REAL,
+      recommended_server TEXT,
+      confidence REAL,
+      algorithm TEXT,
+      rf_recommendation TEXT,
+      rf_confidence REAL,
+      is_anomaly BOOLEAN,
+      threat_level TEXT,
+      predicted_load REAL,
+      scaling_action TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
   // Create indexes for better query performance
   db.exec(`
     CREATE INDEX IF NOT EXISTS idx_requests_timestamp ON api_requests(timestamp);
@@ -128,6 +180,7 @@ const initDatabase = () => {
     CREATE INDEX IF NOT EXISTS idx_logs_timestamp ON system_logs(timestamp);
     CREATE INDEX IF NOT EXISTS idx_dashboard_user_email ON "dashboard-user"(email);
     CREATE INDEX IF NOT EXISTS idx_dashboard_user_created_at ON "dashboard-user"(created_at);
+    CREATE INDEX IF NOT EXISTS idx_ai_policies_timestamp ON ai_policies(timestamp);
   `);
 
   console.log('✅ SQLite Database initialized successfully');
@@ -163,7 +216,45 @@ const updateUserLastLogin = db.prepare(`
   UPDATE "dashboard-user" SET last_login = CURRENT_TIMESTAMP WHERE id = ?
 `);
 
+const insertAiPolicy = db.prepare(`
+  INSERT INTO ai_policies (
+    timestamp, cpu_usage, memory_usage, request_count, error_rate, 
+    recommended_server, confidence, algorithm, 
+    rf_recommendation, rf_confidence,
+    is_anomaly, threat_level, 
+    predicted_load, scaling_action
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+`);
+
 // Helper functions
+const saveAiPolicy = data => {
+  try {
+    return retryOnLock(
+      () =>
+        insertAiPolicy.run(
+          data.timestamp || new Date().toISOString(),
+          data.cpuUsage || 0,
+          data.memoryUsage || 0,
+          data.requestCount || 0,
+          data.errorRate || 0,
+          data.recommendedServer || 'server_0',
+          data.confidence || 0,
+          data.algorithm || 'Unknown',
+          data.rfRecommendation || 'Unknown',
+          data.rfConfidence || 0,
+          data.isAnomaly ? 1 : 0,
+          data.threatLevel || 'Low',
+          data.predictedLoad || 0,
+          data.scalingAction || 'Stable'
+        ),
+      5,
+      50
+    );
+  } catch (error) {
+    console.error('❌ Error saving AI Policy to SQLite:', error.message);
+  }
+};
+
 const saveRequest = data => {
   try {
     return retryOnLock(
@@ -330,6 +421,22 @@ const getStats = () => {
   }
 };
 
+const getServerDistribution = () => {
+  try {
+    const stmt = db.prepare(`
+      SELECT ai_decision as name, COUNT(*) as value
+      FROM api_requests
+      WHERE timestamp >= datetime('now', '-1 hour')
+      AND ai_decision IS NOT NULL
+      GROUP BY ai_decision
+    `);
+    return stmt.all();
+  } catch (error) {
+    console.error('❌ Error fetching server distribution:', error.message);
+    return [];
+  }
+};
+
 // Cleanup old data (optional - call periodically)
 const cleanupOldData = (daysToKeep = 7) => {
   try {
@@ -369,6 +476,20 @@ const getRecentMetrics = (limit = 50) => {
     return stmt.all(limit).reverse(); // Reverse to show oldest first for charts
   } catch (error) {
     console.error('❌ Error fetching recent metrics:', error.message);
+    return [];
+  }
+};
+
+const getRecentAiPolicies = (limit = 10) => {
+  try {
+    const stmt = db.prepare(`
+      SELECT * FROM ai_policies 
+      ORDER BY timestamp DESC 
+      LIMIT ?
+    `);
+    return stmt.all(limit);
+  } catch (error) {
+    console.error('❌ Error fetching recent AI policies:', error.message);
     return [];
   }
 };
@@ -432,12 +553,15 @@ module.exports = {
   saveMetric,
   saveBatchMetrics,
   saveLog,
+  saveAiPolicy,
   getRecentRequests,
   getRequestsByTimeRange,
   getMetricsByTimeRange,
   getSystemLogs,
   getRecentMetrics,
+  getRecentAiPolicies,
   getStats,
+  getServerDistribution,
   cleanupOldData,
   // Auth functions at root level for direct access
   saveUser,

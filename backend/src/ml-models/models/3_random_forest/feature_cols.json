@@ -1,0 +1,20 @@
+[
+  "request_count",
+  "avg_response_time",
+  "error_rate",
+  "bot_rate",
+  "hour",
+  "weekday",
+  "is_weekend",
+  "request_count_lag_1",
+  "request_count_lag_2",
+  "request_count_lag_3",
+  "request_count_lag_4",
+  "request_count_lag_5",
+  "avg_response_time_lag_1",
+  "avg_response_time_lag_2",
+  "error_rate_lag_1",
+  "error_rate_lag_2",
+  "request_count_rolling_mean",
+  "request_count_rolling_std"
+]

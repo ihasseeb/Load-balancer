@@ -1,6 +1,7 @@
 // API Service for Backend Integration
-// Use direct backend URL instead of proxy to avoid POST body issues
-const API_BASE_URL = 'http://localhost:8000/api/v1';
+// In Docker: nginx proxies /api to backend, so use relative path
+// In local dev: use direct backend URL
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
 
 export interface HealthData {
   status: string;

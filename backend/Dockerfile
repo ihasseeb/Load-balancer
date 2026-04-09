@@ -14,6 +14,9 @@ RUN npm ci --only=production
 # Copy application source files
 COPY src ./src
 
+# Copy config file for environment variables
+COPY config.env ./config.env
+
 # Create necessary directories
 RUN mkdir -p logs data
 

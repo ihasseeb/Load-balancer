@@ -177,6 +177,28 @@ class MetricsCollector {
 
       saveBatchMetrics(metricsToSave);
 
+      // 🤖 INTEGRATE AI DECISION ENGINE (Trigger every 5s automatically)
+      // Note: We avoid direct require at top to prevent any potential subtle circularity
+      // as metricController also imports this collector.
+      const { sendToAIDecisionEngine } = require('../controllers/aiController');
+
+      const aiInput = {
+        request_count: parseInt(requestsPerSecond * 60) || 0,
+        avg_response_time: 0.1, // Placeholder
+        error_rate: parseFloat(errorRate) / 100 || 0,
+        bot_rate: 0.05,
+        hour: new Date().getHours(),
+        weekday: new Date().getDay(),
+        cpuUsage: parseFloat(cpuUsage),
+        memoryUsage: parseFloat(memoryUsage)
+      };
+
+      // Run AI Inference in background (async)
+      sendToAIDecisionEngine(aiInput).catch(err => {
+        // Just log, don't crash the collector
+        console.error('[Metrics] AI Decision triggered but failed:', err.message);
+      });
+
       console.log(
         `[Metrics] 📊 CPU: ${cpuUsage.toFixed(2)}% | Mem: ${memoryUsage.toFixed(
           2
@@ -198,8 +220,7 @@ class MetricsCollector {
 
     this.isRunning = true;
     console.log(
-      `[Metrics] ✅ Starting automatic collection (every ${
-        this.intervalSeconds
+      `[Metrics] ✅ Starting automatic collection (every ${this.intervalSeconds
       }s)`
     );
 

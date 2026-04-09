@@ -14,6 +14,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
+# Base directory = folder where this script lives
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def load_features(features_file):
     """Load preprocessed features"""
     print(f"📖 Loading features from: {features_file}")
@@ -122,7 +125,7 @@ def evaluate_model(model, X, y_true):
     plt.title('Confusion Matrix - Anomaly Detection')
     plt.ylabel('True Label')
     plt.xlabel('Predicted Label')
-    plt.savefig('confusion_matrix.png', dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(BASE_DIR, 'confusion_matrix.png'), dpi=300, bbox_inches='tight')
     print(f"\n💾 Saved confusion matrix to: confusion_matrix.png")
     
     # Anomaly scores
@@ -136,7 +139,7 @@ def evaluate_model(model, X, y_true):
     plt.ylabel('Frequency')
     plt.title('Anomaly Score Distribution')
     plt.legend()
-    plt.savefig('anomaly_scores.png', dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(BASE_DIR, 'anomaly_scores.png'), dpi=300, bbox_inches='tight')
     print(f"💾 Saved anomaly scores to: anomaly_scores.png")
     
     return {
@@ -151,17 +154,17 @@ def save_model(model, scaler, feature_cols, metrics):
     """Save anomaly detection model"""
     print("\n💾 Saving model...")
     
-    joblib.dump(model, 'model.pkl')
+    joblib.dump(model, os.path.join(BASE_DIR, 'model.pkl'))
     print("   ✅ Saved model.pkl")
     
-    joblib.dump(scaler, 'scaler.pkl')
+    joblib.dump(scaler, os.path.join(BASE_DIR, 'scaler.pkl'))
     print("   ✅ Saved scaler.pkl")
     
-    with open('feature_cols.json', 'w') as f:
+    with open(os.path.join(BASE_DIR, 'feature_cols.json'), 'w') as f:
         json.dump(feature_cols, f, indent=2)
     print("   ✅ Saved feature_cols.json")
     
-    with open('metrics.json', 'w') as f:
+    with open(os.path.join(BASE_DIR, 'metrics.json'), 'w') as f:
         json.dump(metrics, f, indent=2)
     print("   ✅ Saved metrics.json")
 
@@ -169,7 +172,7 @@ def main():
     """Main training pipeline"""
     print("🚀 Anomaly Detection Training Pipeline\n")
     
-    FEATURES_FILE = "../../data/features/features.parquet"
+    FEATURES_FILE = os.path.join(BASE_DIR, "../../data/features/features.parquet")
     
     if not os.path.exists(FEATURES_FILE):
         print(f"❌ Features file not found: {FEATURES_FILE}")

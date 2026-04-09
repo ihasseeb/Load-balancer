@@ -212,6 +212,10 @@
                     <h3>� Loki</h3>
                     <p>Centralized log aggregation for the entire stack.</p>
                 </div>
+                <div class="card" style="border-top: 2px solid var(--purple);">
+                    <h3>🧠 AI Decision Engine</h3>
+                    <p>Python/Flask service running ensemble ML models.</p>
+                </div>
                 <div class="card" style="border-top: 2px solid var(--blue);">
                     <h3>� AI Adaptive Dashboard</h3>
                     <p>Real-time visualization & intelligent control UI.</p>
@@ -229,22 +233,25 @@
         <div class="phase-section">
             <div class="phase-tag" style="color: var(--green);">Phase 2: Real-Time Data Ingestion & Storage</div>
 
-            <div class="phase-row" style="grid-template-columns: 1fr 1fr;">
+            <div class="phase-row" style="grid-template-columns: repeat(3, 1fr);">
                 <div class="card" style="border-left: 3px solid var(--pink);">
                     <h3>📝 Server & Request Logs</h3>
-                    <p>Real-time extraction of: Timestamp, IP Address, Method, Endpoint, Status, Device, Source, Bytes.
-                    </p>
+                    <p style="font-size: 0.75rem;">IP, Endpoint, Status, Device, Source, Bytes.</p>
                 </div>
                 <div class="card" style="border-left: 3px solid var(--orange);">
                     <h3>📈 System Metrics</h3>
-                    <p>Real-time Response Time, CPU Load, Memory Usage, & Active Connections.</p>
+                    <p style="font-size: 0.75rem;">Response Time, CPU, RAM, Active Connections.</p>
+                </div>
+                <div class="card" style="border-left: 3px solid var(--purple);">
+                    <h3>🤖 AI Decision Data</h3>
+                    <p style="font-size: 0.75rem;">Server Recs, Anomaly, Load Forecast, Confidence.</p>
                 </div>
             </div>
 
             <!-- ARROWS TO STORAGE -->
             <div
-                style="display: flex; justify-content: center; gap: 400px; margin: 15px 0; color: var(--green); font-size: 1.5rem; opacity: 0.7;">
-                <span>↓</span><span>↓</span>
+                style="display: flex; justify-content: center; gap: 200px; margin: 15px 0; color: var(--green); font-size: 1.5rem; opacity: 0.7;">
+                <span>↓</span><span>↓</span><span>↓</span>
             </div>
 
             <!-- Central Storage -->
@@ -252,8 +259,8 @@
                 <div class="card storage-card"
                     style="background: rgba(16, 185, 129, 0.1); border-color: var(--green); border-width: 2px; width: 450px; text-align: center;">
                     <h3>🗄️ SQLite Database</h3>
-                    <p><b>monitoring.db</b>: Unified store for all processed data.</p>
-                    <span class="endpoint">Path: ./logs/monitoring.db</span>
+                    <p><b>monitoring.db</b>: Unified store for Requests, Metrics, and <b>AI Policies</b>.</p>
+                    <span class="endpoint">Path: ./backend/data/monitoring.db</span>
                 </div>
             </div>
         </div>
@@ -398,14 +405,60 @@
                     &nwarr; Return to Dashboard: Model Insights & Predictions &nwarr;
                 </p>
             </div>
+            <!-- PHASE 5: REAL-TIME AI INTELLIGENCE & SYNC -->
+            <div class="phase-section">
+                <div class="phase-tag" style="color: var(--pink);">Phase 5: Real-Time AI Intelligence & Dashboard Sync
+                </div>
+
+                <div class="phase-row">
+                    <!-- Ensemble decision card -->
+                    <div class="card ai-card" style="border-top: 2px solid var(--purple);">
+                        <h3>🧠 Ensemble Decision Logic</h3>
+                        <p>
+                            <b style="color: #fff; font-size: 0.8rem; display: block; margin-bottom: 5px;">MODEL
+                                CONSENSUS:</b>
+                            Real-time synchronization between <b>XGBoost</b> (Primary) and <b>Random Forest</b>
+                            (Checker).
+                        </p>
+                    </div>
+
+                    <!-- Load Forecasting card -->
+                    <div class="card" style="border-top: 2px solid var(--blue);">
+                        <h3>📈 Traffic Forecasting</h3>
+                        <p>
+                            <b style="color: #fff; font-size: 0.8rem; display: block; margin-bottom: 5px;">LSTM
+                                ENGINE:</b>
+                            Analyzes traffic history to predict next few minutes of RPS trends for proactive scaling.
+                        </p>
+                    </div>
+
+                    <!-- Unified API card -->
+                    <div class="card" style="border-top: 2px solid var(--green);">
+                        <h3>💓 Unified Heartbeat API</h3>
+                        <p>
+                            <b style="color: #fff; font-size: 0.8rem; display: block; margin-bottom: 5px;">API ENDPOINT
+                                (/ai-services):</b>
+                            Consolidates all metrics, logs, and AI insights into a single 5-second pulse.
+                        </p>
+                    </div>
+
+                    <!-- Live Visuals card -->
+                    <div class="card" style="border-top: 2px solid var(--orange);">
+                        <h3>📺 Real-Time Visualization</h3>
+                        <p>
+                            <b style="color: #fff; font-size: 0.8rem; display: block; margin-bottom: 5px;">LIVE
+                                DASH:</b>
+                            Instant mapping of AI confidence, anomalies, and logs directly to the React UI.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-
-    </div>
-
-    <div style="margin-top: 30px; color: var(--text-dim); font-size: 0.8rem;">
-        &copy; 2026 AI Load Balancer - Professional Architecture Overview
-    </div>
+        <div style="margin-top: 30px; color: var(--text-dim); font-size: 0.8rem; text-align: center;">
+            &copy; 2026 AI Load Balancer - Professional Architecture Overview (Updated: 6 March 2026)
+        </div>
 
 </body>
 

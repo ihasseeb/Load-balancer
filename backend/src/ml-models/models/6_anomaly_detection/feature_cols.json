@@ -1,0 +1,9 @@
+[
+  "request_count",
+  "avg_response_time",
+  "error_rate",
+  "bot_rate",
+  "total_bytes",
+  "server_error_count",
+  "client_error_count"
+]

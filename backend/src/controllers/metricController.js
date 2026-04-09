@@ -1,33 +1,15 @@
-const os = require('os');
 const client = require('prom-client');
+const metricsCollector = require('../services/metricsCollector');
 const { sendToAIDecisionEngine } = require('./aiController');
 
-const collectDefaultMetrics = client.collectDefaultMetrics;
-collectDefaultMetrics();
-
-const cpuGauge = new client.Gauge({
-  name: 'system_cpu_usage',
-  help: 'CPU usage %'
-});
-const memGauge = new client.Gauge({
-  name: 'system_memory_usage',
-  help: 'Memory usage %'
-});
+// Registry is handled globally by prom-client
 const reqGauge = new client.Counter({
   name: 'api_request_count',
   help: 'Number of API requests'
 });
 
 exports.collectSystemMetrics = async () => {
-  const cpuLoad = os.loadavg()[0];
-  const totalMem = os.totalmem();
-  const freeMem = os.freemem();
-  const memUsage = ((totalMem - freeMem) / totalMem) * 100;
-
-  cpuGauge.set(cpuLoad);
-  memGauge.set(memUsage);
-
-  return { cpuUsage: cpuLoad, memoryUsage: memUsage };
+  return metricsCollector.getCurrentMetrics();
 };
 
 exports.getPrometheusMetrics = async (req, res) => {
@@ -36,9 +18,22 @@ exports.getPrometheusMetrics = async (req, res) => {
 };
 
 exports.triggerAI = async (req, res) => {
-  const metrics = await exports.collectSystemMetrics();
-  const result = await sendToAIDecisionEngine(metrics);
-  res.json({ metrics, aiDecision: result });
+  const metrics = metricsCollector.getCurrentMetrics();
+
+  // Map our metrics to names expected by AI Flask API if needed
+  const aiInput = {
+    request_count: parseInt(metrics.rps * 60) || 0, // Approx requests per min
+    avg_response_time: parseFloat(metrics.responseTime) || 0.1,
+    error_rate: parseFloat(metrics.errorRate) / 100 || 0,
+    bot_rate: 0.05, // Placeholder if not tracked
+    hour: new Date().getHours(),
+    weekday: new Date().getDay(),
+    cpuUsage: parseFloat(metrics.cpu),
+    memoryUsage: parseFloat(metrics.memory)
+  };
+
+  const result = await sendToAIDecisionEngine(aiInput);
+  res.json({ systemMetrics: metrics, aiDecision: result });
 };
 
 exports.reqGauge = reqGauge;

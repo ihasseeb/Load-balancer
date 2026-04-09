@@ -33,6 +33,6 @@ pyarrow>=15.0.0
 # gym>=0.26.2
 # stable-baselines3>=2.2.1
 
-# Jupyter (for notebooks)
-jupyter>=1.0.0
-ipykernel>=6.28.0
+# Jupyter (for notebooks - dev only, not needed in Docker)
+# jupyter>=1.0.0
+# ipykernel>=6.28.0

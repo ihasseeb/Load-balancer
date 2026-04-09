@@ -14,6 +14,9 @@ import json
 import matplotlib.pyplot as plt
 import os
 
+# Base directory = folder where this script lives
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def load_features(features_file):
     """Load preprocessed features"""
     print(f"📖 Loading features from: {features_file}")
@@ -105,20 +108,20 @@ def plot_feature_importance(model, feature_cols):
     plt.bar(range(len(importance)), importance[indices])
     plt.xticks(range(len(importance)), [feature_cols[i] for i in indices], rotation=90)
     plt.tight_layout()
-    plt.savefig('feature_importance.png', dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(BASE_DIR, 'feature_importance.png'), dpi=300, bbox_inches='tight')
     print(f"💾 Saved to: feature_importance.png")
     
     return {feature_cols[i]: float(importance[i]) for i in range(len(feature_cols))}
 
 def save_model(model, scaler, feature_cols, metrics):
     """Save model"""
-    joblib.dump(model, 'model.pkl')
-    joblib.dump(scaler, 'scaler.pkl')
+    joblib.dump(model, os.path.join(BASE_DIR, 'model.pkl'))
+    joblib.dump(scaler, os.path.join(BASE_DIR, 'scaler.pkl'))
     
-    with open('feature_cols.json', 'w') as f:
+    with open(os.path.join(BASE_DIR, 'feature_cols.json'), 'w') as f:
         json.dump(feature_cols, f, indent=2)
     
-    with open('metrics.json', 'w') as f:
+    with open(os.path.join(BASE_DIR, 'metrics.json'), 'w') as f:
         json.dump(metrics, f, indent=2)
     
     print("\n💾 Model saved!")
@@ -127,7 +130,7 @@ def main():
     """Main training pipeline"""
     print("🚀 XGBoost Training Pipeline\n")
     
-    FEATURES_FILE = "../../data/features/features.parquet"
+    FEATURES_FILE = os.path.join(BASE_DIR, "../../data/features/features.parquet")
     
     if not os.path.exists(FEATURES_FILE):
         print(f"❌ Features file not found: {FEATURES_FILE}")

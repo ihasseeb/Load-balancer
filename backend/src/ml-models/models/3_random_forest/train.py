@@ -15,6 +15,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 
+# Base directory = folder where this script lives
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 def load_features(features_file):
     """Load preprocessed features"""
     print(f"📖 Loading features from: {features_file}")
@@ -151,20 +154,20 @@ def save_model(model, scaler, feature_cols, metrics):
     print("\n💾 Saving model...")
     
     # Save model
-    joblib.dump(model, 'model.pkl')
+    joblib.dump(model, os.path.join(BASE_DIR, 'model.pkl'))
     print("   ✅ Saved model.pkl")
     
     # Save scaler
-    joblib.dump(scaler, 'scaler.pkl')
+    joblib.dump(scaler, os.path.join(BASE_DIR, 'scaler.pkl'))
     print("   ✅ Saved scaler.pkl")
     
     # Save feature columns
-    with open('feature_cols.json', 'w') as f:
+    with open(os.path.join(BASE_DIR, 'feature_cols.json'), 'w') as f:
         json.dump(feature_cols, f, indent=2)
     print("   ✅ Saved feature_cols.json")
     
     # Save metrics
-    with open('metrics.json', 'w') as f:
+    with open(os.path.join(BASE_DIR, 'metrics.json'), 'w') as f:
         json.dump(metrics, f, indent=2)
     print("   ✅ Saved metrics.json")
 
@@ -172,8 +175,8 @@ def main():
     """Main training pipeline"""
     print("🚀 Random Forest Training Pipeline\n")
     
-    # Paths
-    FEATURES_FILE = "../../data/features/features.parquet"
+    # Paths — always relative to this script's location
+    FEATURES_FILE = os.path.join(BASE_DIR, "../../data/features/features.parquet")
     
     # Check if features exist
     if not os.path.exists(FEATURES_FILE):

@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kubernetes Architecture - AI Load Balancer</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        font-size: 1.1em;
+        opacity: 0.9;
+      }
+
+      .content {
+        padding: 30px;
+      }
+
+      .diagram-container {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 20px;
+        overflow-x: auto;
+        border: 2px solid #e9ecef;
+        display: flex;
+        justify-content: center;
+      }
+
+      svg {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+      }
+
+      .info-card {
+        background: #f8f9fa;
+        border-left: 4px solid #667eea;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .info-card h3 {
+        color: #667eea;
+        margin-bottom: 10px;
+        font-size: 1.2em;
+      }
+
+      .info-card ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .info-card li {
+        padding: 5px 0;
+        color: #555;
+        display: flex;
+        align-items: center;
+      }
+
+      .info-card li:before {
+        content: "✓";
+        color: #667eea;
+        font-weight: bold;
+        margin-right: 10px;
+      }
+
+      .export-section {
+        margin-top: 30px;
+        padding: 20px;
+        background: #e7f3ff;
+        border-radius: 8px;
+        border-left: 4px solid #0066cc;
+      }
+
+      .export-section h3 {
+        color: #0066cc;
+        margin-bottom: 15px;
+      }
+
+      .export-buttons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: all 0.3s ease;
+        font-weight: 600;
+      }
+
+      .btn-primary {
+        background: #667eea;
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background: #5568d3;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+      }
+
+      .btn-secondary {
+        background: #764ba2;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background: #63398b;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(118, 75, 162, 0.4);
+      }
+
+      .footer {
+        background: #f8f9fa;
+        padding: 20px;
+        text-align: center;
+        color: #666;
+        border-top: 1px solid #e9ecef;
+        margin-top: 30px;
+      }
+
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 1.8em;
+        }
+
+        .container {
+          margin: 0;
+          border-radius: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🚀 Kubernetes Architecture</h1>
+        <p>AI Load Balancer - Complete Microservices Setup</p>
+      </div>
+
+      <div class="content">
+        <div class="diagram-container">
+          <div class="mermaid" id="k8sDiagram">
+            graph TB subgraph Internet["🌍 Clients/Users"] Client["Users &
+            Requests"] end subgraph K8s["Kubernetes Cluster"] subgraph
+            Ingress["Ingress & LB"] IngNode["NGINX Ingress"] end subgraph
+            Frontend["Frontend Service"] FS["Service:80"] FE1["Pod 1: React"]
+            FE2["Pod 2: React"] end subgraph Backend["Backend API"]
+            BS["Service:8000"] BE1["Pod 1: Node"] BE2["Pod 2: Node"] BE3["Pod 3:
+            Node"] end subgraph AI["AI Service"] AS["Service:5000"] AI1["Pod 1:
+            Flask"] AI2["Pod 2: Flask"] end subgraph Storage["Data & Storage"]
+            PVC["PVC: 50Gi"] DB["SQLite DB"] end subgraph Monitor["Monitoring"]
+            Prom["Prometheus"] Loki["Loki"] Promtail["Promtail"] end subgraph
+            Infra["Infrastructure"] Redis["Redis Cache"] CM["ConfigMap"]
+            Sec["Secrets"] end end subgraph External["External"] Models["ML
+            Models"] end Client -->|HTTP| IngNode IngNode -->|Route| FS FS -->
+            FE1 FS --> FE2 IngNode -->|Route| BS FE1 -->|API| BS FE2 -->|API| BS
+            BS --> BE1 BS --> BE2 BS --> BE3 BE1 -->|Predict| AS BE2
+            -->|Predict| AS BE3 -->|Predict| AS AS --> AI1 AS --> AI2 AI1 -->
+            Models AI2 --> Models BE1 -->|Read/Write| PVC BE2 -->|Read/Write|
+            PVC BE3 -->|Read/Write| PVC PVC --> DB BE1 -->|Cache| Redis BE2
+            -->|Cache| Redis BE3 -->|Cache| Redis BE1 -->|Metrics| Prom BE2
+            -->|Metrics| Prom AI1 -->|Metrics| Prom FE1 -->|Logs| Promtail FE2
+            -->|Logs| Promtail Promtail --> Loki BE1 -.->|Uses| CM BE1
+            -.->|Uses| Sec style IngNode
+            fill:#ff6b6b,stroke:#333,stroke-width:2px,color:#fff style PVC
+            fill:#f38181,stroke:#333,stroke-width:2px,color:#fff style Models
+            fill:#95e1d3,stroke:#333,stroke-width:2px,color:#333 style Prom
+            fill:#ffd93d,stroke:#333,stroke-width:2px,color:#333 style Loki
+            fill:#6bcf7f,stroke:#333,stroke-width:2px,color:#fff style Redis
+            fill:#c7f0d8,stroke:#333,stroke-width:2px,color:#333
+          </div>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-card">
+            <h3>🌐 Frontend Layer</h3>
+            <ul>
+              <li>React + NGINX</li>
+              <li>2-3 pod replicas</li>
+              <li>Auto-scaling enabled</li>
+              <li>Load balanced</li>
+            </ul>
+          </div>
+
+          <div class="info-card">
+            <h3>🔧 Backend API</h3>
+            <ul>
+              <li>Node.js Express</li>
+              <li>2-5 pod replicas</li>
+              <li>CPU 70% threshold</li>
+              <li>RAM 80% threshold</li>
+            </ul>
+          </div>
+
+          <div class="info-card">
+            <h3>🧠 AI Service</h3>
+            <ul>
+              <li>Python Flask</li>
+              <li>2-4 pod replicas</li>
+              <li>ML model predictions</li>
+              <li>Auto-scaling enabled</li>
+            </ul>
+          </div>
+
+          <div class="info-card">
+            <h3>💾 Storage</h3>
+            <ul>
+              <li>SQLite Database</li>
+              <li>PersistentVolume</li>
+              <li>50Gi allocation</li>
+              <li>Persistent across pods</li>
+            </ul>
+          </div>
+
+          <div class="info-card">
+            <h3>📊 Monitoring</h3>
+            <ul>
+              <li>Prometheus metrics</li>
+              <li>Loki log aggregation</li>
+              <li>Promtail log shipper</li>
+              <li>Real-time analytics</li>
+            </ul>
+          </div>
+
+          <div class="info-card">
+            <h3>⚙️ Infrastructure</h3>
+            <ul>
+              <li>NGINX Ingress</li>
+              <li>Redis cache</li>
+              <li>ConfigMaps</li>
+              <li>Secrets management</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="export-section">
+          <h3>📥 Download Diagram</h3>
+          <p style="margin-bottom: 15px; color: #333">
+            Right-click on the diagram and select 'Save image as...' to download
+            as PNG
+          </p>
+          <div class="export-buttons">
+            <button class="btn-primary" onclick="downloadDiagram()">
+              📥 Download as PNG
+            </button>
+            <button class="btn-secondary" onclick="printDiagram()">
+              🖨️ Print Diagram
+            </button>
+          </div>
+        </div>
+
+        <div class="footer">
+          <p>
+            <strong
+              >AI Load Balancer - Kubernetes Deployment Architecture</strong
+            >
+          </p>
+          <p>
+            Generated: March 9, 2026 | Framework: Kubernetes + Microservices
+          </p>
+          <p>
+            Components: Frontend, Backend API, AI Service, SQLite DB, Monitoring
+            Stack
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      mermaid.initialize({
+        startOnLoad: true,
+        theme: "default",
+        securityLevel: "loose",
+        logLevel: "debug",
+      });
+
+      mermaid.contentLoaded();
+
+      function downloadDiagram() {
+        const svg = document.querySelector(".mermaid svg");
+        if (!svg) {
+          alert("Diagram not ready. Please wait a moment and try again.");
+          return;
+        }
+
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const svgData = new XMLSerializer().serializeToString(svg);
+        const img = new Image();
+
+        img.onload = function () {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.fillStyle = "white";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0);
+
+          const link = document.createElement("a");
+          link.href = canvas.toDataURL("image/png");
+          link.download = "kubernetes-architecture.png";
+          link.click();
+        };
+
+        img.onerror = function () {
+          alert(
+            "Could not render diagram. Try right-clicking on diagram and using browser's save option.",
+          );
+        };
+
+        img.src = "data:image/svg+xml;base64," + btoa(svgData);
+      }
+
+      function printDiagram() {
+        window.print();
+      }
+    </script>
+  </body>
+</html>

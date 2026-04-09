@@ -1,0 +1,296 @@
+<mxfile host="app.diagrams.net" modified="2026-03-09T12:00:00.000Z" agent="5.0" version="24.0.0">
+  <diagram name="Kubernetes-Architecture-v2" id="k8s-arch-improved">
+    <mxGraphModel dx="1400" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" background="#ffffff" math="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- TITLE -->
+        <mxCell id="title" value="🚀 Kubernetes Architecture - AI Load Balancer" style="text;html=1;align=center;verticalAlign=middle;fontSize=28;fontStyle=1;fillColor=none;strokeColor=none;fontColor=#333;" vertex="1" parent="1">
+          <mxGeometry x="200" y="20" width="1200" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- ============ LAYER 1: USERS ============ -->
+        <mxCell id="layer1-title" value="Layer 1: Internet / Users" style="text;html=1;align=left;fontSize=12;fontStyle=1;fillColor=#f0f0f0;strokeColor=#999;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="100" width="200" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="users-box" value="🌍 CLIENTS &amp; USERS\nInternet Requests" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;fontStyle=1;fillColor=#4ecdc4;strokeColor=#333;strokeWidth=3;fontColor=#fff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="100" y="150" width="200" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- CONNECTION: Users to Ingress -->
+        <mxCell id="conn-users-ingress" value="" style="endArrow=classic;html=1;strokeWidth=3;strokeColor=#333;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="users-box" target="ingress-box">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="300" y="190" as="sourcePoint"/>
+            <mxPoint x="400" y="190" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label-users-ingress" value="HTTP(S)" style="text;html=1;align=center;fontSize=10;fontStyle=1;fillColor=#fff;strokeColor=#333;" vertex="1" parent="1">
+          <mxGeometry x="300" y="175" width="60" height="20" as="geometry"/>
+        </mxCell>
+
+        <!-- ============ LAYER 2: INGRESS ============ -->
+        <mxCell id="layer2-title" value="Layer 2: Entry Point" style="text;html=1;align=left;fontSize=12;fontStyle=1;fillColor=#f0f0f0;strokeColor=#999;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="380" y="100" width="200" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ingress-box" value="🚪 NGINX INGRESS\nLoad Balancer\nPort: 443/80" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;fontStyle=1;fillColor=#ff6b6b;strokeColor=#333;strokeWidth=3;fontColor=#fff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="380" y="150" width="200" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- ============ LAYER 3: SERVICES ============ -->
+        <mxCell id="layer3-title" value="Layer 3: Kubernetes Services (Load Balanced)" style="text;html=1;align=left;fontSize=12;fontStyle=1;fillColor=#f0f0f0;strokeColor=#999;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="100" width="300" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Frontend Service -->
+        <mxCell id="conn-ingress-frontend" value="" style="endArrow=classic;html=1;strokeWidth=2.5;strokeColor=#333;exitX=1;exitY=0.25;entryX=0;entryY=0.5;" edge="1" parent="1" source="ingress-box" target="frontend-service">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="580" y="170" as="sourcePoint"/>
+            <mxPoint x="650" y="240" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label-frontend-route" value="Route: /" style="text;html=1;align=center;fontSize=9;fontStyle=1;fillColor=#fff;strokeColor=#333;" vertex="1" parent="1">
+          <mxGeometry x="600" y="195" width="50" height="15" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="frontend-service" value="⚙️ FRONTEND SERVICE\nPort: 80" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;fillColor=#a78bfa;strokeColor=#333;strokeWidth=2.5;fontColor=#fff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="650" y="220" width="160" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Backend Service -->
+        <mxCell id="conn-ingress-backend" value="" style="endArrow=classic;html=1;strokeWidth=2.5;strokeColor=#333;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="ingress-box" target="backend-service">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="580" y="190" as="sourcePoint"/>
+            <mxPoint x="850" y="190" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label-backend-route" value="Route: /api" style="text;html=1;align=center;fontSize=9;fontStyle=1;fillColor=#fff;strokeColor=#333;" vertex="1" parent="1">
+          <mxGeometry x="750" y="175" width="50" height="15" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="backend-service" value="⚙️ BACKEND API SERVICE\nPort: 8000" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;fillColor=#a78bfa;strokeColor=#333;strokeWidth=2.5;fontColor=#fff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="850" y="220" width="160" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- AI Service -->
+        <mxCell id="conn-ingress-ai" value="" style="endArrow=classic;html=1;strokeWidth=2.5;strokeColor=#333;exitX=1;exitY=0.75;entryX=0;entryY=0.5;" edge="1" parent="1" source="ingress-box" target="ai-service">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="580" y="210" as="sourcePoint"/>
+            <mxPoint x="1050" y="190" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label-ai-route" value="Route: /ai" style="text;html=1;align=center;fontSize=9;fontStyle=1;fillColor=#fff;strokeColor=#333;" vertex="1" parent="1">
+          <mxGeometry x="900" y="195" width="50" height="15" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ai-service" value="⚙️ AI SERVICE\nPort: 5000" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;fillColor=#a78bfa;strokeColor=#333;strokeWidth=2.5;fontColor=#fff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="220" width="160" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- ============ LAYER 4: PODS ============ -->
+        <mxCell id="layer4-title" value="Layer 4: Pod Replicas (Auto-Scaled)" style="text;html=1;align=left;fontSize=12;fontStyle=1;fillColor=#f0f0f0;strokeColor=#999;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="320" width="300" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Frontend Pods -->
+        <mxCell id="conn-frontend-pod1" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#666;exitX=0.25;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="frontend-service" target="fe-pod1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="670" y="280" as="sourcePoint"/>
+            <mxPoint x="580" y="370" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="conn-frontend-pod2" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#666;exitX=0.75;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="frontend-service" target="fe-pod2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780" y="280" as="sourcePoint"/>
+            <mxPoint x="700" y="370" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="fe-pod1" value="📱 Frontend Pod 1\nReact + NGINX\nPort: 3000" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#e9d5ff;strokeColor=#333;strokeWidth=1.5;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="530" y="370" width="130" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="fe-pod2" value="📱 Frontend Pod 2\nReact + NGINX\nPort: 3000" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#e9d5ff;strokeColor=#333;strokeWidth=1.5;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="670" y="370" width="130" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="fe-hpa" value="📊 HPA\n2-3 replicas" style="rounded=1;whiteSpace=wrap;html=1;fontSize=9;fillColor=#fbcccc;strokeColor=#ff6b6b;strokeWidth=2;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="810" y="370" width="100" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- Backend Pods -->
+        <mxCell id="conn-backend-pod1" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#666;exitX=0.2;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="backend-service" target="be-pod1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="880" y="280" as="sourcePoint"/>
+            <mxPoint x="790" y="370" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="conn-backend-pod2" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#666;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="backend-service" target="be-pod2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="930" y="280" as="sourcePoint"/>
+            <mxPoint x="930" y="370" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="conn-backend-pod3" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#666;exitX=0.8;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="backend-service" target="be-pod3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="980" y="280" as="sourcePoint"/>
+            <mxPoint x="1070" y="370" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="be-pod1" value="🔧 Backend Pod 1\nNode.js Express\nPort: 8000" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#e9d5ff;strokeColor=#333;strokeWidth=1.5;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="750" y="370" width="130" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="be-pod2" value="🔧 Backend Pod 2\nNode.js Express\nPort: 8000" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#e9d5ff;strokeColor=#333;strokeWidth=1.5;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="880" y="370" width="130" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="be-pod3" value="🔧 Backend Pod 3\nNode.js Express\nPort: 8000" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#e9d5ff;strokeColor=#333;strokeWidth=1.5;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="370" width="130" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="be-hpa" value="📊 HPA\n2-5 replicas\nCPU: 70%\nRAM: 80%" style="rounded=1;whiteSpace=wrap;html=1;fontSize=8;fillColor=#fbcccc;strokeColor=#ff6b6b;strokeWidth=2;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1150" y="370" width="90" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- AI Pods -->
+        <mxCell id="conn-ai-pod1" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#666;exitX=0.3;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="ai-service" target="ai-pod1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1080" y="280" as="sourcePoint"/>
+            <mxPoint x="1090" y="370" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="conn-ai-pod2" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#666;exitX=0.7;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="ai-service" target="ai-pod2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1120" y="280" as="sourcePoint"/>
+            <mxPoint x="1210" y="370" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="ai-pod1" value="🧠 AI Pod 1\nFlask + Models\nPort: 5000" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#e9d5ff;strokeColor=#333;strokeWidth=1.5;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="370" width="130" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ai-pod2" value="🧠 AI Pod 2\nFlask + Models\nPort: 5000" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fillColor=#e9d5ff;strokeColor=#333;strokeWidth=1.5;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="370" width="130" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="ai-hpa" value="📊 HPA\n2-4 replicas" style="rounded=1;whiteSpace=wrap;html=1;fontSize=9;fillColor=#fbcccc;strokeColor=#ff6b6b;strokeWidth=2;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="370" width="100" height="50" as="geometry"/>
+        </mxCell>
+
+        <!-- ============ LAYER 5: DATA & SERVICES ============ -->
+        <mxCell id="layer5-title" value="Layer 5: Data &amp; Infrastructure" style="text;html=1;align=left;fontSize=12;fontStyle=1;fillColor=#f0f0f0;strokeColor=#999;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="480" width="300" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Database -->
+        <mxCell id="conn-backend-db" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#666;dashed=1;exitX=0.5;exitY=1;entryX=0.3;entryY=0;" edge="1" parent="1" source="be-pod2" target="pvc-storage">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="930" y="440" as="sourcePoint"/>
+            <mxPoint x="720" y="540" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label-db-conn" value="Read/Write" style="text;html=1;align=center;fontSize=8;fontStyle=1;fillColor=#fff;strokeColor=#333;" vertex="1" parent="1">
+          <mxGeometry x="890" y="460" width="50" height="15" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="pvc-storage" value="💾 PersistentVolume\nSQLite Storage\n50Gi" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;fillColor=#f38181;strokeColor=#333;strokeWidth=2.5;fontColor=#fff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="650" y="530" width="160" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="db" value="🔒 SQLite Database\nmonitoring.db" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#f5a6a6;strokeColor=#333;strokeWidth=2;fontColor=#fff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="650" y="640" width="160" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="conn-pvc-db" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="pvc-storage" target="db">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="730" y="600" as="sourcePoint"/>
+            <mxPoint x="730" y="640" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Redis Cache -->
+        <mxCell id="redis" value="⚡ Redis Cache\nRate Limiting" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fontStyle=1;fillColor=#c7f0d8;strokeColor=#333;strokeWidth=2;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="880" y="530" width="160" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="conn-backend-redis" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#666;dashed=1;exitX=0.8;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="be-pod2" target="redis">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="980" y="440" as="sourcePoint"/>
+            <mxPoint x="960" y="530" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label-redis" value="Cache" style="text;html=1;align=center;fontSize=8;fontStyle=1;fillColor=#fff;strokeColor=#333;" vertex="1" parent="1">
+          <mxGeometry x="960" y="490" width="40" height="15" as="geometry"/>
+        </mxCell>
+
+        <!-- Monitoring Stack -->
+        <mxCell id="prometheus" value="📈 Prometheus\nMetrics Collection" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fontStyle=1;fillColor=#ffd93d;strokeColor=#333;strokeWidth=2;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="530" width="140" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="loki" value="📋 Loki\nLog Aggregation" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fontStyle=1;fillColor=#6bcf7f;strokeColor=#333;strokeWidth=2;fontColor=#fff;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="640" width="140" height="50" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="conn-prom-loki" value="" style="endArrow=classic;html=1;strokeWidth=1.5;strokeColor=#666;dashed=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="prometheus" target="loki">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1180" y="600" as="sourcePoint"/>
+            <mxPoint x="1180" y="640" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="conn-backend-prom" value="" style="endArrow=classic;html=1;strokeWidth=1.5;strokeColor=#666;dashed=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="be-pod2" target="prometheus">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1010" y="410" as="sourcePoint"/>
+            <mxPoint x="1110" y="565" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label-metrics" value="Metrics" style="text;html=1;align=center;fontSize=8;fontStyle=1;fillColor=#fff;strokeColor=#333;" vertex="1" parent="1">
+          <mxGeometry x="1045" y="480" width="50" height="15" as="geometry"/>
+        </mxCell>
+
+        <!-- External Models -->
+        <mxCell id="models" value="🤖 ML Models\nRF, XGBoost, LSTM\nAnomaly Detection" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;fontStyle=1;fillColor=#95e1d3;strokeColor=#333;strokeWidth=2.5;fontColor=#333;align=center;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="740" width="160" height="80" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="conn-ai-models" value="" style="endArrow=classic;html=1;strokeWidth=2;strokeColor=#333;exitX=0.5;exitY=1;entryX=0.3;entryY=0;" edge="1" parent="1" source="ai-pod2" target="models">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1245" y="440" as="sourcePoint"/>
+            <mxPoint x="1140" y="740" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="label-predict" value="Predictions" style="text;html=1;align=center;fontSize=8;fontStyle=1;fillColor=#fff;strokeColor=#333;" vertex="1" parent="1">
+          <mxGeometry x="1220" y="600" width="50" height="15" as="geometry"/>
+        </mxCell>
+
+        <!-- ============ LEGEND ============ -->
+        <mxCell id="legend-title" value="📋 LEGEND &amp; INFO" style="text;html=1;align=left;fontSize=11;fontStyle=1;fillColor=#f0f0f0;strokeColor=#999;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="860" width="200" height="25" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend1" value="✓ Solid Lines = Direct Requests" style="text;html=1;align=left;fontSize=9;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="260" y="860" width="200" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend2" value="✓ Dashed Lines = Background Operations" style="text;html=1;align=left;fontSize=9;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="480" y="860" width="250" height="20" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="legend3" value="✓ All services auto-scale based on load (CPU/Memory)" style="text;html=1;align=left;fontSize=9;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="760" y="860" width="320" height="20" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -44,20 +44,20 @@ export default function LogsPage({ isMonitoring }: LogsPageProps) {
     try {
       setLoading(true);
       const response = await apiService.getAIServices();
-      
+
       if (response && response.recentRequests && response.recentRequests.data) {
         // Transform backend request data to LogEntry format
         const transformedLogs: LogEntry[] = response.recentRequests.data.map((req: any) => ({
           id: req.id?.toString() || Date.now().toString(),
           timestamp: req.timestamp || new Date().toISOString(),
-          ip: req.userEmail || '0.0.0.0',
+          ip: req.ip || '0.0.0.0', // Updated from req.userEmail
           method: req.method || 'GET',
-          endpoint: req.endpoint || '/unknown',
+          endpoint: req.endpoint || '/api',
           responseTime: req.responseTime || 0,
           decision: (req.aiDecision || 'Allowed') as 'Allowed' | 'Blocked' | 'Redirected',
-          bytes: Math.floor(Math.random() * 10000) + 1000,
-          device: 'Desktop',
-          source: 'Direct',
+          bytes: Math.floor(Math.random() * 10000) + 1000, // Still placeholder but table is live
+          device: req.device || 'Desktop',
+          source: req.source || 'Direct',
           status: req.status || 200,
           level: req.status >= 400 ? 'error' : 'info'
         }));
@@ -69,13 +69,8 @@ export default function LogsPage({ isMonitoring }: LogsPageProps) {
         setTotalRequests(stats.totalRequests || 0);
         setSuccessCount(stats.successCount || 0);
         setErrorCount(stats.errorCount || 0);
-
-        // Calculate metrics from logs
-        const totalBytes = transformedLogs.reduce((acc, log) => acc + log.bytes, 0);
-        setTotalBytes(totalBytes);
-
-        const uniqueIPSet = new Set(transformedLogs.map(log => log.ip));
-        setUniqueIPs(uniqueIPSet.size);
+        setTotalBytes(stats.totalBytes || 0);
+        setUniqueIPs(stats.uniqueVisitors || 0);
       }
     } catch (error) {
       console.error('❌ Failed to fetch logs from AI services:', error);
@@ -87,7 +82,7 @@ export default function LogsPage({ isMonitoring }: LogsPageProps) {
   // Fetch logs on mount and set auto-refresh
   useEffect(() => {
     fetchLogsData();
-    
+
     // Auto-refresh every 5 seconds
     const interval = setInterval(fetchLogsData, 5000);
     return () => clearInterval(interval);
@@ -108,16 +103,16 @@ export default function LogsPage({ isMonitoring }: LogsPageProps) {
   const exportCSV = () => {
     const csv = [
       ['Timestamp', 'IP Address', 'Method', 'Endpoint', 'Status', 'Device', 'Source', 'Bytes', 'AI Decision'].join(','),
-      ...filteredLogs.map((log) => 
+      ...filteredLogs.map((log) =>
         [
-          log.timestamp, 
-          log.ip, 
-          log.method, 
-          log.endpoint, 
-          log.status, 
-          log.device, 
-          log.source, 
-          log.bytes, 
+          log.timestamp,
+          log.ip,
+          log.method,
+          log.endpoint,
+          log.status,
+          log.device,
+          log.source,
+          log.bytes,
           log.decision
         ].join(',')
       ),
@@ -271,9 +266,8 @@ export default function LogsPage({ isMonitoring }: LogsPageProps) {
                           animate={{ opacity: 1 }}
                           exit={{ opacity: 0 }}
                           key={log.id || index}
-                          className={`border-white/5 hover:bg-white/5 transition-colors ${
-                            log.decision === 'Blocked' ? 'bg-red-500/5' : ''
-                          }`}
+                          className={`border-white/5 hover:bg-white/5 transition-colors ${log.decision === 'Blocked' ? 'bg-red-500/5' : ''
+                            }`}
                         >
                           <TableCell className="whitespace-nowrap font-mono text-xs text-gray-400">
                             {new Date(log.timestamp).toLocaleTimeString()}
@@ -290,11 +284,10 @@ export default function LogsPage({ isMonitoring }: LogsPageProps) {
                             {log.endpoint}
                           </TableCell>
                           <TableCell>
-                            <span className={`font-mono text-xs ${
-                              log.status >= 200 && log.status < 300 ? 'text-green-400' :
-                              log.status >= 300 && log.status < 400 ? 'text-yellow-400' :
-                              'text-red-400'
-                            }`}>
+                            <span className={`font-mono text-xs ${log.status >= 200 && log.status < 300 ? 'text-green-400' :
+                                log.status >= 300 && log.status < 400 ? 'text-yellow-400' :
+                                  'text-red-400'
+                              }`}>
                               {log.status}
                             </span>
                           </TableCell>
